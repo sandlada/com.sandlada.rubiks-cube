@@ -59,7 +59,7 @@
           type="button"
           :disabled="props.disabled"
           :aria-label="`${t('hud.switchFront')} ${face}`"
-          :title="SWITCH_KEY_HINTS[face]"
+          :title="SWITCH_KEY_HINTS[face] ?? undefined"
           class="pointer-events-auto flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 border border-black/15 bg-white/70 px-1 text-sm font-light tracking-[0.15em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 hover:text-neutral-900 active:border-[#e30613] active:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-black/15 disabled:hover:text-neutral-800 md:px-2 dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40 dark:hover:text-white dark:active:text-white dark:disabled:hover:border-white/15 dark:disabled:hover:text-white/85"
           @click="onSwitch(face)"
         >

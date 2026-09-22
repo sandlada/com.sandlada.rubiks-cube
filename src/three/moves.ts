@@ -1,4 +1,3 @@
-import * as THREE from 'three'
 import { axisUnit } from './math'
 import type { FaceName, ParsedTurn } from './types'
 import { FACE_ORDER } from './constants'
