@@ -415,10 +415,12 @@ export function faceMapForSpins(spins: SpinFn[]): Record<FaceName, FaceName> {
   return out
 }
 
-/** Remap one move's face letter through a face map; suffix preserved. */
+/** Remap one move's face letter through a face map; suffix and case preserved. */
 export function remapMove(move: string, map: Record<string, string>): string {
   const face = move.charAt(0)
-  const target = map[face] ?? face
+  const upper = face.toUpperCase()
+  const mappedUpper = map[upper] ?? map[face] ?? upper
+  const target = face === upper ? mappedUpper : mappedUpper.toLowerCase()
   return `${target}${move.slice(1)}`
 }
 

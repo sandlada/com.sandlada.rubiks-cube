@@ -62,7 +62,8 @@
     "peekDown": "Peek below",
     "peekTop": "Peek top",
     "switchFront": "Switch front",
-    "frontTurns": "Face turn"
+    "frontTurns": "Face turn",
+    "innerTurns": "Inner slice"
   },
   "archive": {
     "title": "Saved Rubik's Cube Games",

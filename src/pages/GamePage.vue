@@ -122,6 +122,7 @@
           <GameControls
             :disabled="!isInteractive"
             :centers="centers"
+            :size="store.size"
             @press="pressMove"
             @peek="onPeek"
             @release="onReleasePeek"

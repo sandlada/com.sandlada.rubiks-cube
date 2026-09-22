@@ -111,7 +111,20 @@ export function parseMoveTurn(move: string): ParsedTurn | null {
     return null
   }
   const face = move.charAt(0)
-  if (face !== 'U' && face !== 'D' && face !== 'L' && face !== 'R' && face !== 'F' && face !== 'B') {
+  if (
+    face !== 'U' &&
+    face !== 'D' &&
+    face !== 'L' &&
+    face !== 'R' &&
+    face !== 'F' &&
+    face !== 'B' &&
+    face !== 'u' &&
+    face !== 'd' &&
+    face !== 'l' &&
+    face !== 'r' &&
+    face !== 'f' &&
+    face !== 'b'
+  ) {
     return null
   }
   if (move.length === 1) {
@@ -128,19 +141,20 @@ export function parseMoveTurn(move: string): ParsedTurn | null {
 }
 
 function spinFor(faceLetter: string): (v: Vec3) => Vec3 {
-  if (faceLetter === 'U') {
+  const upper = faceLetter.toUpperCase()
+  if (upper === 'U') {
     return rotYMinus
   }
-  if (faceLetter === 'D') {
+  if (upper === 'D') {
     return rotYPlus
   }
-  if (faceLetter === 'F') {
+  if (upper === 'F') {
     return rotZMinus
   }
-  if (faceLetter === 'B') {
+  if (upper === 'B') {
     return rotZPlus
   }
-  if (faceLetter === 'R') {
+  if (upper === 'R') {
     return rotXMinus
   }
   return rotXPlus
@@ -155,8 +169,11 @@ export function rotateStickers(
 ): number[][] {
   const h = (n - 1) / 2
   const { slots, byKey } = getSlots(n)
-  const axis = faceLetter === 'U' || faceLetter === 'D' ? 1 : faceLetter === 'F' || faceLetter === 'B' ? 2 : 0
-  const layer = faceLetter === 'U' || faceLetter === 'F' || faceLetter === 'R' ? h : -h
+  const upper = faceLetter.toUpperCase()
+  const inner = faceLetter !== upper
+  const axis = upper === 'U' || upper === 'D' ? 1 : upper === 'F' || upper === 'B' ? 2 : 0
+  const outward = upper === 'U' || upper === 'F' || upper === 'R' ? 1 : -1
+  const layer = inner ? outward * (h - 1) : outward * h
   const spin = spinFor(faceLetter)
   const next = cloneStickers(stickers)
   for (const s of slots) {

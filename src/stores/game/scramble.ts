@@ -30,10 +30,10 @@ export type RandomFn = () => number
 export function createScrambleGenerator(random: RandomFn = Math.random): {
   generate: (size: CubeSize, difficulty: Difficulty) => string[]
 } {
-  function pickFace(prevFace: string): string {
-    let face = SCRAMBLE_FACES[Math.floor(random() * SCRAMBLE_FACES.length)] ?? 'U'
-    while (face === prevFace) {
-      face = SCRAMBLE_FACES[Math.floor(random() * SCRAMBLE_FACES.length)] ?? 'U'
+  function pickFace(prevFace: string, pool: readonly string[]): string {
+    let face = pool[Math.floor(random() * pool.length)] ?? 'U'
+    while (face.toUpperCase() === prevFace.toUpperCase()) {
+      face = pool[Math.floor(random() * pool.length)] ?? 'U'
     }
     return face
   }
@@ -41,9 +41,13 @@ export function createScrambleGenerator(random: RandomFn = Math.random): {
   function generate(size: CubeSize, difficulty: Difficulty): string[] {
     const total = scrambleLength(size, difficulty)
     const queue: string[] = []
+    // 4x4 needs inner slices to truly scramble centers; outer-only keeps
+    // each face's 2x2 center block on its home face.
+    const pool: readonly string[] =
+      size === 4 ? [...SCRAMBLE_FACES, 'u', 'd', 'l', 'r', 'f', 'b'] : SCRAMBLE_FACES
     let prevFace = ''
     for (let i = 0; i < total; i++) {
-      const face = pickFace(prevFace)
+      const face = pickFace(prevFace, pool)
       prevFace = face
       const suffix = SCRAMBLE_SUFFIXES[Math.floor(random() * SCRAMBLE_SUFFIXES.length)] ?? ''
       queue.push(`${face}${suffix}`)

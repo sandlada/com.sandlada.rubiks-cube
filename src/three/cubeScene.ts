@@ -624,16 +624,18 @@ export class CubeScene {
       Math.abs(drag.getComponent(firstAxis)) < Math.abs(drag.getComponent(secondAxis)) ? firstAxis : secondAxis
     const half = (this.sizeN - 1) / 2
     const layerCoord = hit.localCubelet.getComponent(turnAxisIdx)
-    const outward = Math.abs(layerCoord) > half - 0.25 ? (Math.sign(layerCoord) as 1 | -1) : 0
-    if (outward === 0) {
+    // Snap to the grabbed cubelet's grid layer so inner slices are draggable.
+    // Odd-size dead-center (layer 0 on 3x3) stays non-draggable.
+    const layer = Math.round(layerCoord + half) - half
+    if (Math.abs(layer) < 0.25) {
       return false
     }
+    const outward = (layer < 0 ? -1 : 1) as 1 | -1
     const turnAxis = axisUnit(turnAxisIdx)
     const sign = Math.sign(turnAxis.cross(hit.localPoint).dot(drag))
     if (sign === 0) {
       return false
     }
-    const layer = outward * half
     const members = this.cubelets.filter(
       (cubelet) => Math.abs(cubelet.position.getComponent(turnAxisIdx) - layer) < 0.25,
     )
@@ -740,7 +742,7 @@ export class CubeScene {
       quarters = preview.currentAngle >= 0 ? 1 : -1
     }
     const effSign = (quarters > 0 ? 1 : -1) as 1 | -1
-    const single = moveForAxisLayer(preview.axisIdx, preview.outward, effSign)
+    const single = moveForAxisLayer(preview.axisIdx, preview.layer, effSign, this.sizeN)
     const move = Math.abs(quarters) === 2 ? `${single.charAt(0)}2` : single
     this.current = { move, ms: TURN_MS, resolve: () => {} }
     this.tween = {

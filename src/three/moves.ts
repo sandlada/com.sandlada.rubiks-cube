@@ -8,16 +8,22 @@ export function createSolvedStickers(n: number): number[][] {
 }
 
 /**
- * Parse outer-face-turn notation. Throws on anything else (wide/inner-layer
- * moves and cube rotations are out of scope for this MVP).
+ * Parse face-turn notation. Uppercase (UDLRFB) = outer layer; lowercase
+ * (udlrfb) = inner slice adjacent to that face (4x4 only, plus middle
+ * slice on 3x3 where both cases address layer 0 from opposite sides).
  */
 export function parseMove(move: string, n: number): ParsedTurn {
-  const m = /^([UDLRFB])(['2]?)$/.exec(move)
+  const m = /^([UDLRFBudlrfb])(['2]?)$/.exec(move)
   if (!m) {
     throw new Error(`Unsupported move notation: ${move}`)
   }
-  const face = m[1] as FaceName
+  const raw = m[1] as string
+  const face = raw.toUpperCase() as FaceName
   const suffix = m[2] as '' | "'" | '2'
+  const inner = raw !== face
+  if (inner && n !== 3 && n !== 4) {
+    throw new Error(`Unsupported move notation: ${move}`)
+  }
   let axisIdx: 0 | 1 | 2
   let outward: 1 | -1
   switch (face) {
@@ -52,14 +58,24 @@ export function parseMove(move: string, n: number): ParsedTurn {
   const angleAboutOutward = dir * magnitude
   const angle = outward === 1 ? angleAboutOutward : -angleAboutOutward
   const half = (n - 1) / 2
-  return { axisIdx, axis: axisUnit(axisIdx), angle, layer: outward * half }
+  const layer = inner ? outward * (half - 1) : outward * half
+  return { axisIdx, axis: axisUnit(axisIdx), angle, layer: layer === 0 ? 0 : layer }
 }
 
 /**
  * Map a +axis rotation back to face-turn notation (inverse of parseMove for
  * quarter turns). angleSign is the sign of a 90-degree rotation about +axis.
+ * Inner slices (4x4, or middle on 3x3) return lowercase.
  */
-export function moveForAxisLayer(axisIdx: 0 | 1 | 2, outward: 1 | -1, angleSign: 1 | -1): string {
+export function moveForAxisLayer(
+  axisIdx: 0 | 1 | 2,
+  layer: number,
+  angleSign: 1 | -1,
+  n: number,
+): string {
+  const outward: 1 | -1 = layer < 0 ? -1 : 1
+  const half = (n - 1) / 2
+  const inner = Math.abs(layer) < half - 0.25
   const face: FaceName =
     axisIdx === 0
       ? outward === 1
@@ -73,5 +89,6 @@ export function moveForAxisLayer(axisIdx: 0 | 1 | 2, outward: 1 | -1, angleSign:
           ? 'F'
           : 'B'
   const clockwiseAboutFace = angleSign * outward === -1
-  return clockwiseAboutFace ? face : `${face}'`
+  const base = inner ? face.toLowerCase() : face
+  return clockwiseAboutFace ? base : `${base}'`
 }

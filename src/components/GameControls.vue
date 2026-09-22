@@ -19,6 +19,25 @@
       </div>
     </section>
 
+    <section v-if="props.size === 4" class="flex flex-col gap-1" :aria-label="t('hud.innerTurns')">
+      <p class="text-[11px] font-light uppercase tracking-[0.3em] text-neutral-500 dark:text-white/50">
+        {{ t('hud.innerTurns') }}
+      </p>
+      <div class="grid grid-cols-3 gap-1.5" role="group">
+        <button
+          v-for="m in INNER_FRONT_TURNS"
+          :key="m"
+          type="button"
+          :disabled="props.disabled"
+          :aria-label="m"
+          class="pointer-events-auto min-h-[44px] min-w-[44px] border border-black/15 bg-white/70 px-2 text-sm font-light tracking-[0.15em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 hover:text-neutral-900 active:border-[#e30613] active:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-black/15 disabled:hover:text-neutral-800 dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40 dark:hover:text-white dark:active:text-white dark:disabled:hover:border-white/15 dark:disabled:hover:text-white/85"
+          @click="onPress(m)"
+        >
+          {{ m }}
+        </button>
+      </div>
+    </section>
+
     <section class="flex flex-col gap-1">
       <div
         class="grid grid-cols-4 gap-1.5"
@@ -81,6 +100,7 @@ import { useI18n } from 'vue-i18n'
 import type { FaceName, PeekFace } from '@three/index'
 
 const FRONT_TURNS = ['F', "F'", 'F2'] as const
+const INNER_FRONT_TURNS = ['f', "f'", 'f2'] as const
 
 const PEEK_BUTTONS: ReadonlyArray<{ face: PeekFace; key: string; hint: string }> = [
   { face: 'L', key: 'hud.peekLeft', hint: 'A · ←' },
@@ -133,6 +153,7 @@ const SWITCH_FACES: ReadonlyArray<FaceName> = ['U', 'D', 'L', 'R', 'B']
 const props = defineProps<{
   disabled: boolean
   centers: Record<FaceName, string>
+  size: number
 }>()
 
 const emit = defineEmits<{

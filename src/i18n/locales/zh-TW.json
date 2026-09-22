@@ -62,7 +62,8 @@
     "peekDown": "看下",
     "peekTop": "看頂",
     "switchFront": "切換正面",
-    "frontTurns": "正面轉動"
+    "frontTurns": "正面轉動",
+    "innerTurns": "內層轉動"
   },
   "archive": {
     "title": "魔方遊戲存檔",
