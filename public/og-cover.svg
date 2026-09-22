@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <title>Rubik's Cube — online speedcube game</title>
+  <desc>Cover: isometric 3x3 cube with white, green and red faces beside the title RUBIK'S CUBE, 2x2 to 4x4, scramble timer save.</desc>
+  <defs>
+    <radialGradient id="glow" cx="30%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0.02"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#050505"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- viewfinder corners -->
+  <g stroke="#ffffff" stroke-opacity="0.35" stroke-width="2" fill="none">
+    <path d="M40 72V40h32"/>
+    <path d="M1128 40h32v32"/>
+    <path d="M40 558v32h32"/>
+    <path d="M1160 558v32h-32"/>
+  </g>
+
+  <!-- cube shadow -->
+  <ellipse cx="330" cy="520" rx="180" ry="26" fill="#000000" fill-opacity="0.65"/>
+
+  <!-- isometric cube, solved state -->
+  <g transform="translate(96,118) scale(7.4)">
+    <g fill="#ffffff">
+      <path d="M32.00,18.36 L36.55,21.00 L32.00,23.64 L27.45,21.00 Z"/>
+      <path d="M26.83,21.36 L31.38,24.00 L26.83,26.64 L22.29,24.00 Z"/>
+      <path d="M21.67,24.36 L26.21,27.00 L21.67,29.64 L17.12,27.00 Z"/>
+      <path d="M37.17,21.36 L41.71,24.00 L37.17,26.64 L32.62,24.00 Z"/>
+      <path d="M32.00,24.36 L36.55,27.00 L32.00,29.64 L27.45,27.00 Z"/>
+      <path d="M26.83,27.36 L31.38,30.00 L26.83,32.64 L22.29,30.00 Z"/>
+      <path d="M42.33,24.36 L46.88,27.00 L42.33,29.64 L37.79,27.00 Z"/>
+      <path d="M37.17,27.36 L41.71,30.00 L37.17,32.64 L32.62,30.00 Z"/>
+      <path d="M32.00,30.36 L36.55,33.00 L32.00,35.64 L27.45,33.00 Z"/>
+    </g>
+    <g fill="#00a651">
+      <path d="M31.69,36.18 L31.69,41.46 L27.14,38.82 L27.14,33.54 Z"/>
+      <path d="M26.52,33.18 L26.52,38.46 L21.98,35.82 L21.98,30.54 Z"/>
+      <path d="M21.36,30.18 L21.36,35.46 L16.81,32.82 L16.81,27.54 Z"/>
+      <path d="M31.69,42.18 L31.69,47.46 L27.14,44.82 L27.14,39.54 Z"/>
+      <path d="M26.52,39.18 L26.52,44.46 L21.98,41.82 L21.98,36.54 Z"/>
+      <path d="M21.36,36.18 L21.36,41.46 L16.81,38.82 L16.81,33.54 Z"/>
+      <path d="M31.69,48.18 L31.69,53.46 L27.14,50.82 L27.14,45.54 Z"/>
+      <path d="M26.52,45.18 L26.52,50.46 L21.98,47.82 L21.98,42.54 Z"/>
+      <path d="M21.36,42.18 L21.36,47.46 L16.81,44.82 L16.81,39.54 Z"/>
+    </g>
+    <g fill="#e30613">
+      <path d="M32.31,36.18 L32.31,41.46 L36.86,38.82 L36.86,33.54 Z"/>
+      <path d="M37.48,33.18 L37.48,38.46 L42.02,35.82 L42.02,30.54 Z"/>
+      <path d="M42.64,30.18 L42.64,35.46 L47.19,32.82 L47.19,27.54 Z"/>
+      <path d="M32.31,42.18 L32.31,47.46 L36.86,44.82 L36.86,39.54 Z"/>
+      <path d="M37.48,39.18 L37.48,44.46 L42.02,41.82 L42.02,36.54 Z"/>
+      <path d="M42.64,36.18 L42.64,41.46 L47.19,38.82 L47.19,33.54 Z"/>
+      <path d="M32.31,48.18 L32.31,53.46 L36.86,50.82 L36.86,45.54 Z"/>
+      <path d="M37.48,45.18 L37.48,50.46 L42.02,47.82 L42.02,42.54 Z"/>
+      <path d="M42.64,42.18 L42.64,47.46 L47.19,44.82 L47.19,39.54 Z"/>
+    </g>
+  </g>
+
+  <!-- text block -->
+  <g font-family="Inter, 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="560" y="212" font-size="27" font-weight="300" letter-spacing="7" fill="#ffffff" fill-opacity="0.55">ONLINE SPEEDCUBE GAME</text>
+    <text x="556" y="322" font-size="96" font-weight="200" letter-spacing="6" fill="#ffffff">RUBIK'S CUBE</text>
+    <rect x="562" y="356" width="72" height="6" fill="#e30613"/>
+    <text x="560" y="416" font-size="28" font-weight="300" letter-spacing="3" fill="#ffffff" fill-opacity="0.72">2×2 · 3×3 · 4×4 — SCRAMBLE · TIMER · SAVE</text>
+    <text x="560" y="460" font-size="23" font-weight="300" letter-spacing="4" fill="#ffffff" fill-opacity="0.38">PLAY IN BROWSER · NO INSTALL</text>
+  </g>
+</svg>

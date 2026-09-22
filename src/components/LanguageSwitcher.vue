@@ -7,7 +7,7 @@
     <span class="text-center text-[11px] font-light uppercase tracking-[0.25em] text-neutral-500 dark:text-white/50">
       {{ t('common.language') }}
     </span>
-    <div class="grid grid-cols-2 border border-black/15 dark:border-white/15">
+    <div class="grid grid-cols-3 border border-black/15 dark:border-white/15">
       <button
         v-for="entry in entries"
         :key="entry.code"
@@ -35,9 +35,19 @@ const { t, locale } = useI18n()
 const entries = computed(() =>
   SUPPORTED_LOCALES.map((code) => ({
     code,
-    label: code === 'en' ? (t('common.langEnglish') as string) : (t('common.langChinese') as string),
+    label: labelFor(code),
   })),
 )
+
+function labelFor(code: SupportedLocale): string {
+  if (code === 'zh-TW') {
+    return t('common.langTraditional') as string
+  }
+  if (code === 'zh-CN') {
+    return t('common.langSimplified') as string
+  }
+  return t('common.langEnglish') as string
+}
 
 function isActive(code: SupportedLocale): boolean {
   return locale.value === code

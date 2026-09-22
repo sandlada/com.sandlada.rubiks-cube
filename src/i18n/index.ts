@@ -1,7 +1,7 @@
 import { createI18n } from 'vue-i18n'
-import { en, zhCN } from './locales'
+import { en, zhCN, zhTW } from './locales'
 
-export const SUPPORTED_LOCALES = ['en', 'zh-CN'] as const
+export const SUPPORTED_LOCALES = ['en', 'zh-TW', 'zh-CN'] as const
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
 
 export const i18n = createI18n({
@@ -9,8 +9,9 @@ export const i18n = createI18n({
   locale: 'en',
   fallbackLocale: 'en',
   messages: {
-    'zh-CN': zhCN,
     en,
+    'zh-TW': zhTW,
+    'zh-CN': zhCN,
   },
 })
 

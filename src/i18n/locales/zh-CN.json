@@ -6,7 +6,8 @@
     "navArchive": "存档",
     "language": "语言",
     "langEnglish": "English",
-    "langChinese": "中文",
+    "langTraditional": "傳統漢字",
+    "langSimplified": "简体中文",
     "theme": "主题",
     "themeLight": "浅色",
     "themeDark": "深色"

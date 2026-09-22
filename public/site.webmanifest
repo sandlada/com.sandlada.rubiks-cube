@@ -1,0 +1,18 @@
+{
+  "name": "Rubik's Cube — Online Speedcube Game",
+  "short_name": "Rubik's Cube",
+  "description": "Play Rubik's Cube online: 2×2 to 4×4, scramble difficulty levels, timer and save/resume.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

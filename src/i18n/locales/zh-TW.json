@@ -1,0 +1,78 @@
+{
+  "common": {
+    "appName": "魔方",
+    "navMenu": "選單",
+    "navGame": "遊戲",
+    "navArchive": "存檔",
+    "language": "語言",
+    "langEnglish": "English",
+    "langTraditional": "傳統漢字",
+    "langSimplified": "简体中文",
+    "theme": "主題",
+    "themeLight": "淺色",
+    "themeDark": "深色"
+  },
+  "menu": {
+    "title": "魔方 — 在線競速遊戲",
+    "description": "在線玩魔方：2×2 到 4×4、多種打亂難度、計時與存檔/讀檔。",
+    "heading": "魔方",
+    "tagline": "打亂、還原、刷新你的紀錄。",
+    "startGame": "開始遊戲",
+    "openArchive": "開啟存檔"
+  },
+  "game": {
+    "title": "在線玩魔方",
+    "description": "用按鈕與拖拽操作還原魔方，即時計時，支援暫停與自動存檔。",
+    "heading": "遊戲",
+    "backToMenu": "返回選單",
+    "sizeLabel": "階數",
+    "difficultyLabel": "難度",
+    "saveLabel": "存檔",
+    "continueLabel": "繼續",
+    "saved": "已儲存",
+    "scrambling": "魔方打亂初始化",
+    "releaseToTurn": "鬆手旋轉",
+    "releaseToCancel": "鬆手取消",
+    "pauseTitle": "已暫停",
+    "solvedTitle": "已還原",
+    "playAgain": "再來一局",
+    "restart": "重新開始",
+    "quit": "離開",
+    "status": {
+      "idle": "閒置",
+      "ready": "就緒",
+      "playing": "進行中",
+      "paused": "已暫停",
+      "solved": "已還原",
+      "scrambling": "打亂中"
+    },
+    "scrambleTurns": "{count} 轉"
+  },
+  "hud": {
+    "timer": "計時",
+    "moves": "步數",
+    "pause": "暫停",
+    "resume": "繼續",
+    "peekLeft": "看左",
+    "peekRight": "看右",
+    "peekDown": "看下",
+    "peekTop": "看頂",
+    "switchFront": "切換正面",
+    "frontTurns": "正面轉動"
+  },
+  "archive": {
+    "title": "魔方遊戲存檔",
+    "description": "繼續或管理你儲存的魔方遊戲。",
+    "heading": "存檔",
+    "empty": "尚無存檔。",
+    "backToMenu": "返回選單",
+    "savedCount": "存檔數量：{count}",
+    "delete": "刪除",
+    "autoName": "存檔 · {date}"
+  },
+  "difficulty": {
+    "easy": "簡單",
+    "normal": "普通",
+    "hard": "困難"
+  }
+}
