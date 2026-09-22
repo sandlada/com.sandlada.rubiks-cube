@@ -13,11 +13,11 @@
     <div class="hud pointer-events-none absolute inset-0 z-10">
       <div
         v-if="store.status === 'scrambling'"
-        class="absolute inset-x-0 top-4 flex justify-center md:top-8"
+        class="absolute inset-x-0 top-[4.75rem] flex justify-center px-3 md:top-8 md:px-0"
       >
         <p
           role="status"
-          class="border border-black/15 bg-white/70 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.25em] text-neutral-800 backdrop-blur-sm dark:border-white/15 dark:bg-black/60 dark:text-white/85"
+          class="max-w-full truncate border border-black/15 bg-white/70 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.25em] text-neutral-800 backdrop-blur-sm dark:border-white/15 dark:bg-black/60 dark:text-white/85"
         >
           {{ t('game.scrambling') }} · {{ store.scrambleDone }}/{{ store.scrambleMoves.length }}
         </p>
@@ -25,7 +25,7 @@
 
       <div
         v-if="previewHint !== null && isInteractive"
-        class="absolute inset-x-0 top-16 flex justify-center md:top-20"
+        class="absolute inset-x-0 top-[7.5rem] flex justify-center px-3 md:top-20 md:px-0"
       >
         <p
           role="status"
@@ -36,24 +36,24 @@
         </p>
       </div>
       <!-- top-left: timer + move count -->
-      <div class="absolute left-4 top-4 flex flex-col gap-1 md:left-8 md:top-8">
+      <div class="absolute left-3 top-[max(0.75rem,env(safe-area-inset-top))] flex max-w-[44vw] flex-col gap-0.5 md:left-8 md:top-8 md:max-w-none md:gap-1">
         <p class="text-[11px] font-light uppercase tracking-[0.3em] text-neutral-500 dark:text-white/50">
           {{ t('hud.timer') }}
         </p>
-        <p class="text-3xl font-light tabular-nums tracking-[0.1em] text-neutral-900 dark:text-white">
+        <p class="text-2xl font-light tabular-nums tracking-[0.1em] text-neutral-900 md:text-3xl dark:text-white">
           {{ timeText }}
         </p>
-        <p class="text-[11px] font-light uppercase tracking-[0.3em] text-neutral-600 dark:text-white/60">
+        <p class="truncate text-[11px] font-light uppercase tracking-[0.3em] text-neutral-600 dark:text-white/60">
           {{ t('hud.moves') }} · {{ store.moves.length }}
         </p>
       </div>
 
       <!-- top-right: pause + save -->
-      <div class="absolute right-4 top-4 flex items-start gap-2 md:right-8 md:top-8">
+      <div class="absolute right-3 top-[max(0.75rem,env(safe-area-inset-top))] flex max-w-[56vw] flex-wrap items-start justify-end gap-1.5 md:right-8 md:top-8 md:max-w-none md:flex-nowrap md:gap-2">
         <span
           v-if="savedFlash"
           role="status"
-          class="flex min-h-[44px] items-center border border-black/15 bg-white/70 px-3 text-[11px] font-medium uppercase tracking-[0.25em] text-neutral-900 dark:border-white/15 dark:bg-black/60 dark:text-white"
+          class="flex max-w-full items-center truncate border border-black/15 bg-white/70 px-3 py-3 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-900 md:tracking-[0.25em] dark:border-white/15 dark:bg-black/60 dark:text-white"
         >
           {{ t('game.saved') }}
         </span>
@@ -61,7 +61,7 @@
           type="button"
           :aria-label="t('game.saveLabel')"
           :disabled="store.status === 'scrambling'"
-          class="pointer-events-auto min-h-[44px] border border-black/15 bg-white/70 px-4 text-[11px] font-medium uppercase tracking-[0.25em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-30 dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40 dark:hover:text-white"
+          class="pointer-events-auto min-h-[44px] border border-black/15 bg-white/70 px-3 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-30 md:px-4 md:tracking-[0.25em] dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40 dark:hover:text-white"
           @click="onSave"
         >
           {{ t('game.saveLabel') }}
@@ -70,33 +70,34 @@
           v-if="canPause"
           type="button"
           :aria-label="t('hud.pause')"
-          class="pointer-events-auto min-h-[44px] border border-black/15 bg-white/70 px-4 text-[11px] font-medium uppercase tracking-[0.25em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 hover:text-neutral-900 dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40 dark:hover:text-white"
+          class="pointer-events-auto min-h-[44px] border border-black/15 bg-white/70 px-3 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 hover:text-neutral-900 md:px-4 md:tracking-[0.25em] dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40 dark:hover:text-white"
           @click="onPause"
         >
           {{ t('hud.pause') }}
         </button>
       </div>
 
-      <!-- bottom-left: size / difficulty -->
-      <div class="absolute bottom-4 left-4 flex flex-col gap-1 md:bottom-8 md:left-8">
-        <p class="text-[11px] font-light uppercase tracking-[0.3em] text-neutral-600 dark:text-white/60">
-          {{ sizeText }} · {{ t('difficulty.' + store.difficulty) }}
-        </p>
-        <p class="text-[11px] font-light uppercase tracking-[0.3em] text-neutral-400 dark:text-white/40">
-          {{ t('game.status.' + store.status) }}
-        </p>
-      </div>
+      <!-- bottom HUD: mobile = full-width sheet; desktop = opposite corners -->
+      <div class="absolute inset-x-0 bottom-0 flex flex-col gap-2 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:inset-x-8 md:bottom-8 md:flex-row md:items-end md:justify-between md:gap-4 md:px-0 md:pb-0">
+        <div class="flex items-baseline justify-between gap-2 md:flex-col md:items-start md:gap-1">
+          <p class="truncate text-[11px] font-light uppercase tracking-[0.3em] text-neutral-600 dark:text-white/60">
+            {{ sizeText }} · {{ t('difficulty.' + store.difficulty) }}
+          </p>
+          <p class="shrink-0 text-[11px] font-light uppercase tracking-[0.3em] text-neutral-400 dark:text-white/40">
+            {{ t('game.status.' + store.status) }}
+          </p>
+        </div>
 
-      <!-- bottom-right: move buttons -->
-      <div class="absolute bottom-4 right-4 md:bottom-8 md:right-8">
-        <GameControls
-          :disabled="!isInteractive"
-          :centers="centers"
-          @press="pressMove"
-          @peek="onPeek"
-          @release="onReleasePeek"
-          @switch-front="onSwitchFront"
-        />
+        <div class="pointer-events-auto max-h-[42dvh] w-full overflow-y-auto md:max-h-none md:w-auto md:overflow-visible">
+          <GameControls
+            :disabled="!isInteractive"
+            :centers="centers"
+            @press="pressMove"
+            @peek="onPeek"
+            @release="onReleasePeek"
+            @switch-front="onSwitchFront"
+          />
+        </div>
       </div>
 
       <PauseOverlay

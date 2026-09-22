@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-3">
+  <div class="flex w-full flex-col gap-2 md:w-auto md:gap-3">
     <section class="flex flex-col gap-1" :aria-label="t('hud.frontTurns')">
       <p class="text-[11px] font-light uppercase tracking-[0.3em] text-neutral-500 dark:text-white/50">
         {{ t('hud.frontTurns') }}
@@ -21,8 +21,7 @@
 
     <section class="flex flex-col gap-1">
       <div
-        class="grid gap-1.5"
-        :class="isWide ? 'grid-cols-4' : 'grid-cols-2'"
+        class="grid grid-cols-4 gap-1.5"
         role="group"
       >
         <button
@@ -33,7 +32,7 @@
           :aria-label="t(b.key)"
           :title="b.hint"
           :aria-keyshortcuts="b.hint"
-          class="pointer-events-auto flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 border border-black/15 bg-white/70 px-2 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 hover:text-neutral-900 active:border-[#e30613] active:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-black/15 disabled:hover:text-neutral-800 dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40 dark:hover:text-white dark:active:text-white dark:disabled:hover:border-white/15 dark:disabled:hover:text-white/85"
+          class="pointer-events-auto flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 border border-black/15 bg-white/70 px-1 text-center text-[10px] font-medium uppercase leading-tight tracking-[0.2em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 hover:text-neutral-900 active:border-[#e30613] active:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-black/15 disabled:hover:text-neutral-800 md:px-2 md:text-[11px] dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40 dark:hover:text-white dark:active:text-white dark:disabled:hover:border-white/15 dark:disabled:hover:text-white/85"
           @pointerdown="onPeekStart(b.face)"
           @pointerup="onPeekEnd"
           @pointercancel="onPeekEnd"
@@ -41,7 +40,7 @@
           @contextmenu.prevent
         >
           <span>{{ t(b.key) }}</span>
-          <span aria-hidden="true" class="text-[9px] font-light tracking-[0.15em] opacity-60">{{ b.hint }}</span>
+          <span aria-hidden="true" class="hidden text-[9px] font-light tracking-[0.15em] opacity-60 md:inline">{{ b.hint }}</span>
         </button>
       </div>
     </section>
@@ -51,8 +50,7 @@
         {{ t('hud.switchFront') }}
       </p>
       <div
-        class="grid gap-1.5"
-        :class="isWide ? 'grid-cols-5' : 'grid-cols-3'"
+        class="grid grid-cols-5 gap-1.5"
         role="group"
       >
         <button
@@ -62,7 +60,7 @@
           :disabled="props.disabled"
           :aria-label="`${t('hud.switchFront')} ${face}`"
           :title="SWITCH_KEY_HINTS[face]"
-          class="pointer-events-auto flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 border border-black/15 bg-white/70 px-2 text-sm font-light tracking-[0.15em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 hover:text-neutral-900 active:border-[#e30613] active:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-black/15 disabled:hover:text-neutral-800 dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40 dark:hover:text-white dark:active:text-white dark:disabled:hover:border-white/15 dark:disabled:hover:text-white/85"
+          class="pointer-events-auto flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 border border-black/15 bg-white/70 px-1 text-sm font-light tracking-[0.15em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 hover:text-neutral-900 active:border-[#e30613] active:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-black/15 disabled:hover:text-neutral-800 md:px-2 dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40 dark:hover:text-white dark:active:text-white dark:disabled:hover:border-white/15 dark:disabled:hover:text-white/85"
           @click="onSwitch(face)"
         >
           {{ face }}
@@ -78,8 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { observeWidthBreakpoint } from '@sandlada/breakpoint'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { FaceName, PeekFace } from '@three/index'
 
@@ -147,24 +144,16 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
-/** MD3 default `expanded` viewport threshold (>= 840px): roomier grids on desktop. */
-const isWide = ref(false)
-let teardown: (() => void) | undefined
 /** Peek face currently held via keyboard; null when no keyboard peek is active. */
 let keyboardPeek: PeekFace | null = null
 
 onMounted(() => {
-  const subscription = observeWidthBreakpoint('>= 840px').subscribe((value: boolean) => {
-    isWide.value = value
-  })
-  teardown = () => subscription.unsubscribe()
   window.addEventListener('keydown', onKeyDown)
   window.addEventListener('keyup', onKeyUp)
   window.addEventListener('blur', onWindowBlur)
 })
 
 onUnmounted(() => {
-  teardown?.()
   window.removeEventListener('keydown', onKeyDown)
   window.removeEventListener('keyup', onKeyUp)
   window.removeEventListener('blur', onWindowBlur)

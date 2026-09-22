@@ -26,6 +26,18 @@ body {
   flex-direction: column;
 }
 
+@layer base {
+  button,
+  [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:not(:disabled),
+  [role="button"] {
+    cursor: pointer;
+  }
+}
+
 /* Route transition for page-level <Transition> in App.vue */
 .page-enter-active,
 .page-leave-active {
