@@ -121,14 +121,15 @@ import CubeCanvas from '@components/CubeCanvas.vue'
 import GameControls from '@components/GameControls.vue'
 import PauseOverlay from '@components/PauseOverlay.vue'
 import SolvedOverlay from '@components/SolvedOverlay.vue'
+import { useGameCenters, useScrambleRunner } from '@composables/index'
+import { useArchiveStore } from '@stores/archive'
+import { parseCubeSize, parseDifficulty, useGameStore } from '@stores/game'
+import type { FaceName } from '@stores/game'
+import type { PeekFace } from '@three/index'
+import { firstQuery, formatTime } from '@utils/index'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { useArchiveStore } from '../stores/archive'
-import { createSolvedStickers, FACE_ORDER, useGameStore } from '../stores/game'
-import type { CubeSize, Difficulty, FaceName } from '../stores/game'
-import { SCRAMBLE_TURN_MS } from '../three/cubeScene'
-import type { PeekFace } from '../three/cubeScene'
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -140,7 +141,8 @@ const canvasRef = ref<InstanceType<typeof CubeCanvas> | null>(null)
 const savedFlash = ref(false)
 const previewHint = ref<boolean | null>(null)
 let flashHandle = 0
-let scrambleToken = 0
+
+const { startScramble, cancelScramble } = useScrambleRunner(canvasRef, store, previewHint)
 
 const isInteractive = computed(
   () => store.status !== 'paused' && store.status !== 'solved' && store.status !== 'scrambling',
@@ -149,55 +151,7 @@ const canPause = computed(() => store.status === 'playing' || store.status === '
 const timeText = computed(() => formatTime(store.elapsedMs))
 const sizeText = computed(() => `${store.size}×${store.size}`)
 
-/** Sticker palette mirror (index = color number); keep in sync with cubeScene STICKER_COLORS. */
-const STICKER_HEX: ReadonlyArray<string> = [
-  '#FFFFFF',
-  '#FFEB00',
-  '#00D855',
-  '#2D7DFF',
-  '#FF6A00',
-  '#E8002D',
-]
-
-/** Current center color hex per face, for the switch-front dots. */
-const centers = computed<Record<FaceName, string>>(() => {
-  const out = {} as Record<FaceName, string>
-  for (const face of FACE_ORDER) {
-    const index = FACE_ORDER.indexOf(face)
-    const stickers = store.stickers[index] ?? []
-    const colorNo = stickers[Math.floor(stickers.length / 2)] ?? 0
-    out[face] = STICKER_HEX[colorNo] ?? '#FFFFFF'
-  }
-  return out
-})
-
-function formatTime(ms: number): string {
-  const tenthsTotal = Math.max(0, Math.round(ms / 100))
-  const tenths = tenthsTotal % 10
-  const seconds = Math.floor(tenthsTotal / 10) % 60
-  const minutes = Math.floor(tenthsTotal / 600)
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${tenths}`
-}
-
-function firstQuery(value: unknown): string {
-  if (typeof value === 'string') {
-    return value
-  }
-  if (Array.isArray(value)) {
-    const first = value[0]
-    return typeof first === 'string' ? first : ''
-  }
-  return ''
-}
-
-function parseSize(value: string): CubeSize {
-  const n = Number(value)
-  return n === 2 || n === 3 || n === 4 ? n : 3
-}
-
-function parseDifficulty(value: string): Difficulty {
-  return value === 'easy' || value === 'normal' || value === 'hard' ? value : 'normal'
-}
+const centers = useGameCenters(() => store.stickers)
 
 onMounted(() => {
   const saveId = firstQuery(route.query['saveId'])
@@ -223,43 +177,16 @@ onMounted(() => {
       return
     }
   }
-  const size = parseSize(firstQuery(route.query['size']))
+  const size = parseCubeSize(firstQuery(route.query['size']))
   const difficulty = parseDifficulty(firstQuery(route.query['difficulty']))
   store.newGame(size, difficulty)
   startScramble()
 })
 
 onUnmounted(() => {
-  scrambleToken += 1
+  cancelScramble()
   window.clearTimeout(flashHandle)
 })
-
-function startScramble(): void {
-  scrambleToken += 1
-  const token = scrambleToken
-  previewHint.value = null
-  canvasRef.value?.reset(createSolvedStickers(store.size), store.size)
-  void runScramble(token)
-}
-
-async function runScramble(token: number): Promise<void> {
-  const moves = store.scrambleMoves.slice()
-  for (const m of moves) {
-    if (token !== scrambleToken) {
-      return
-    }
-    try {
-      await canvasRef.value?.playMove(m, SCRAMBLE_TURN_MS)
-    } catch {
-      return
-    }
-  }
-  if (token !== scrambleToken) {
-    return
-  }
-  store.finishScramble()
-  store.saveAutosave()
-}
 
 /** Single commit path: canvas emits `move` after its animation completes. */
 function onMove(m: string): void {

@@ -35,7 +35,7 @@
               {{ entry.size }}×{{ entry.size }} · {{ t('difficulty.' + entry.difficulty) }} · {{ t('hud.timer') }} {{ formatTime(entry.elapsedMs) }} · {{ t('hud.moves') }} {{ entry.moves.length }}
             </p>
             <p class="text-[11px] font-light tracking-[0.15em] text-neutral-400 dark:text-white/40">
-              {{ formatDate(entry.updatedAt) }}
+              {{ formatDateEntry(entry.updatedAt) }}
             </p>
           </div>
           <div class="flex shrink-0 gap-2">
@@ -70,10 +70,11 @@
 </template>
 
 <script setup lang="ts">
+import { useArchiveStore } from '@stores/archive'
+import { formatDate, formatTime } from '@utils/index'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink, useRouter } from 'vue-router'
-import { useArchiveStore } from '../stores/archive'
 
 const { t, locale } = useI18n()
 const router = useRouter()
@@ -81,16 +82,8 @@ const archive = useArchiveStore()
 
 const saves = computed(() => archive.findMany())
 
-function formatTime(ms: number): string {
-  const tenthsTotal = Math.max(0, Math.round(ms / 100))
-  const tenths = tenthsTotal % 10
-  const seconds = Math.floor(tenthsTotal / 10) % 60
-  const minutes = Math.floor(tenthsTotal / 600)
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${tenths}`
-}
-
-function formatDate(ts: number): string {
-  return new Date(ts).toLocaleString(locale.value)
+function formatDateEntry(ts: number): string {
+  return formatDate(ts, locale.value)
 }
 
 function resume(id: string): void {

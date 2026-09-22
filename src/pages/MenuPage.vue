@@ -87,11 +87,11 @@
 <script setup lang="ts">
 import LanguageSwitcher from '@components/LanguageSwitcher.vue'
 import ThemeToggle from '@components/ThemeToggle.vue'
+import { scrambleCountFor, useGameStore } from '@stores/game'
+import type { CubeSize, Difficulty } from '@stores/game'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink, useRouter } from 'vue-router'
-import { scrambleCountFor, useGameStore } from '../stores/game'
-import type { CubeSize, Difficulty } from '../stores/game'
 
 const { t } = useI18n()
 const router = useRouter()

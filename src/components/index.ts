@@ -1,0 +1,6 @@
+export { default as CubeCanvas } from './CubeCanvas.vue'
+export { default as GameControls } from './GameControls.vue'
+export { default as LanguageSwitcher } from './LanguageSwitcher.vue'
+export { default as PauseOverlay } from './PauseOverlay.vue'
+export { default as SolvedOverlay } from './SolvedOverlay.vue'
+export { default as ThemeToggle } from './ThemeToggle.vue'

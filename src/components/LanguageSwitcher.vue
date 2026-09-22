@@ -27,8 +27,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { SUPPORTED_LOCALES } from '../i18n'
-import type { SupportedLocale } from '../i18n'
+import { SUPPORTED_LOCALES } from '@i18n/index'
+import type { SupportedLocale } from '@i18n/index'
 
 const { t, locale } = useI18n()
 

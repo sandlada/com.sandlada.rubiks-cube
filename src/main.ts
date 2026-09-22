@@ -1,9 +1,9 @@
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
+import { i18n } from '@i18n/index'
+import { router } from '@router/index'
+import { useThemeStore } from '@stores/theme'
 import App from './App.vue'
-import { i18n } from './i18n'
-import { router } from './router'
-import { useThemeStore } from './stores/theme'
 import './style.css'
 
 const pinia = createPinia()

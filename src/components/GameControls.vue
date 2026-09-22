@@ -81,7 +81,7 @@
 import { observeWidthBreakpoint } from '@sandlada/breakpoint'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { FaceName, PeekFace } from '../three/cubeScene'
+import type { FaceName, PeekFace } from '@three/index'
 
 const FRONT_TURNS = ['F', "F'", 'F2'] as const
 

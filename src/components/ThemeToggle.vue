@@ -26,8 +26,8 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useThemeStore } from '../stores/theme'
-import type { ThemeMode } from '../stores/theme'
+import { useThemeStore } from '@stores/theme'
+import type { ThemeMode } from '@stores/theme'
 
 const { t } = useI18n()
 const theme = useThemeStore()

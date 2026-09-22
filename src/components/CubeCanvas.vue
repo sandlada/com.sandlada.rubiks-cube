@@ -4,8 +4,8 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue';
-import { CubeScene } from '../three/cubeScene';
-import type { PeekFace } from '../three/cubeScene';
+import { CubeScene } from '@three/index';
+import type { PeekFace } from '@three/index';
 
 const props = defineProps<{
   /** Initial state, 6 faces x n*n. Only consumed on mount / explicit reset(). */
