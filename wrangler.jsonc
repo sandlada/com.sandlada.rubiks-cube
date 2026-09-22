@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "rubiks-cube",
+  // Set this to today's date; Workers enables nodejs_compat by default on 2026-08-04+.
+  "compatibility_date": "2026-09-22",
+  // Pure SPA: no Worker script. `wrangler deploy` uploads ./dist as static assets.
+  // single-page-application => /game and /archive fall back to index.html for vue-router createWebHistory.
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
