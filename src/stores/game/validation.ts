@@ -1,4 +1,5 @@
 import type { CubeSize, Difficulty, GameSnapshot, GameStatus } from './types'
+import { parseMoveTurn } from './cubeMath'
 
 export function isCubeSize(v: unknown): v is CubeSize {
   return v === 2 || v === 3 || v === 4
@@ -47,6 +48,16 @@ export function isValidSnapshot(v: unknown): v is GameSnapshot {
   }
   if (!isGameStatus(o['status']) || typeof o['updatedAt'] !== 'number') {
     return false
+  }
+  if (o['historyMoves'] !== undefined) {
+    if (!Array.isArray(o['historyMoves']) || (o['historyMoves'] as unknown[]).length > 20000) {
+      return false
+    }
+    for (const m of o['historyMoves'] as unknown[]) {
+      if (typeof m !== 'string' || parseMoveTurn(m) === null) {
+        return false
+      }
+    }
   }
   return true
 }

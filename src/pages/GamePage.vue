@@ -24,6 +24,26 @@
       </div>
 
       <div
+        v-if="store.solving"
+        class="absolute inset-x-0 top-[4.75rem] flex justify-center px-3 md:top-8 md:px-0"
+      >
+        <p
+          role="status"
+          class="max-w-full truncate border border-black/15 bg-white/70 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.25em] text-neutral-800 backdrop-blur-sm dark:border-white/15 dark:bg-black/60 dark:text-white/85"
+        >
+          {{ t('game.solving') }} · {{ store.solutionDone }}/{{ store.solutionMoves.length }}
+        </p>
+        <button
+          type="button"
+          :aria-label="t('game.cancelSolve')"
+          class="pointer-events-auto ml-1.5 min-h-[44px] border border-black/15 bg-white/70 px-3 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 md:px-4 dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40"
+          @click="onCancelSolve"
+        >
+          {{ t('game.cancelSolve') }}
+        </button>
+      </div>
+
+      <div
         v-if="previewHint !== null && isInteractive"
         class="absolute inset-x-0 top-[7.5rem] flex justify-center px-3 md:top-20 md:px-0"
       >
@@ -60,11 +80,21 @@
         <button
           type="button"
           :aria-label="t('game.saveLabel')"
-          :disabled="store.status === 'scrambling'"
+          :disabled="store.status === 'scrambling' || store.solving"
           class="pointer-events-auto min-h-[44px] border border-black/15 bg-white/70 px-3 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-30 md:px-4 md:tracking-[0.25em] dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40 dark:hover:text-white"
           @click="onSave"
         >
           {{ t('game.saveLabel') }}
+        </button>
+        <button
+          type="button"
+          :aria-label="t('game.solveLabel')"
+          :title="solveDisabledReason"
+          :disabled="!canSolve"
+          class="pointer-events-auto min-h-[44px] border border-black/15 bg-white/70 px-3 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-800 backdrop-blur-sm transition-colors hover:border-black/40 hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-30 md:px-4 md:tracking-[0.25em] dark:border-white/15 dark:bg-black/60 dark:text-white/85 dark:hover:border-white/40 dark:hover:text-white"
+          @click="onSolve"
+        >
+          {{ t('game.solveLabel') }}
         </button>
         <button
           v-if="canPause"
@@ -122,13 +152,13 @@ import CubeCanvas from '@components/CubeCanvas.vue'
 import GameControls from '@components/GameControls.vue'
 import PauseOverlay from '@components/PauseOverlay.vue'
 import SolvedOverlay from '@components/SolvedOverlay.vue'
-import { useGameCenters, useScrambleRunner } from '@composables/index'
+import { useGameCenters, useScrambleRunner, useSolutionRunner } from '@composables/index'
 import { useArchiveStore } from '@stores/archive'
 import { parseCubeSize, parseDifficulty, useGameStore } from '@stores/game'
 import type { FaceName } from '@stores/game'
 import type { PeekFace } from '@three/index'
 import { firstQuery, formatTime } from '@utils/index'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -144,11 +174,24 @@ const previewHint = ref<boolean | null>(null)
 let flashHandle = 0
 
 const { startScramble, cancelScramble } = useScrambleRunner(canvasRef, store, previewHint)
+const { startSolution, cancelSolution } = useSolutionRunner(canvasRef, store)
 
 const isInteractive = computed(
-  () => store.status !== 'paused' && store.status !== 'solved' && store.status !== 'scrambling',
+  () =>
+    !store.solving &&
+    store.status !== 'paused' &&
+    store.status !== 'solved' &&
+    store.status !== 'scrambling',
 )
-const canPause = computed(() => store.status === 'playing' || store.status === 'ready')
+const canPause = computed(
+  () => !store.solving && (store.status === 'playing' || store.status === 'ready'),
+)
+const canSolve = computed(() => store.canAutoSolve())
+const solveDisabledReason = computed(() =>
+  store.size === 4 && store.historyMoves === null
+    ? (t('game.solveUnsupported') as string)
+    : (t('game.solveLabel') as string),
+)
 const timeText = computed(() => formatTime(store.elapsedMs))
 const sizeText = computed(() => `${store.size}×${store.size}`)
 
@@ -186,6 +229,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   cancelScramble()
+  cancelSolution()
   window.clearTimeout(flashHandle)
 })
 
@@ -193,6 +237,17 @@ onUnmounted(() => {
 function onMove(m: string): void {
   if (store.status === 'scrambling') {
     store.applyScrambleMove(m)
+    return
+  }
+  if (store.solving) {
+    if (store.status === 'ready') {
+      store.startTimer()
+    }
+    const solved = store.applySolutionMove(m)
+    store.saveAutosave()
+    if (solved) {
+      store.clearAutosave()
+    }
     return
   }
   if (store.status === 'ready') {
@@ -242,6 +297,7 @@ function onResume(): void {
 }
 
 function onRestart(): void {
+  cancelSolution()
   store.newGame(store.size, store.difficulty)
   startScramble()
 }
@@ -250,8 +306,21 @@ function onQuit(): void {
   void router.push({ name: 'menu' })
 }
 
+function onSolve(): void {
+  if (!canSolve.value) {
+    return
+  }
+  void nextTick().then(() => {
+    startSolution()
+  })
+}
+
+function onCancelSolve(): void {
+  cancelSolution()
+}
+
 function onSave(): void {
-  if (store.status === 'scrambling') {
+  if (store.status === 'scrambling' || store.solving) {
     return
   }
   const snap = store.serialize()

@@ -17,6 +17,8 @@ export const PLASTIC_COLOR = '#111111'
 export const CUBLET_SIZE = 0.95
 export const TURN_MS = 160
 export const SCRAMBLE_TURN_MS = 70
+/** One-click solve playback: fast continuous turning. */
+export const SOLUTION_TURN_MS = 60
 export const PEEK_MS = 180
 export const DRAG_DECIDE_PX = 12
 export const AXIS_DECISIVENESS_RATIO = 1.6

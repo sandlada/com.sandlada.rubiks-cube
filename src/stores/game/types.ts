@@ -12,4 +12,9 @@ export interface GameSnapshot {
   elapsedMs: number
   status: GameStatus
   updatedAt: number
+  /**
+   * Producing history in the current frame (scramble + player turns).
+   * Powers 4x4 one-click solve by inversion; absent on legacy saves.
+   */
+  historyMoves?: string[]
 }
