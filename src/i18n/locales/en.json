@@ -1,0 +1,77 @@
+{
+  "common": {
+    "appName": "Rubik's Cube",
+    "navMenu": "Menu",
+    "navGame": "Game",
+    "navArchive": "Archive",
+    "language": "Language",
+    "langEnglish": "English",
+    "langChinese": "中文",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark"
+  },
+  "menu": {
+    "title": "Rubik's Cube — Online Speedcube Game",
+    "description": "Play Rubik's Cube online: 2×2 to 4×4, scramble difficulty levels, timer and save/resume.",
+    "heading": "Rubik's Cube",
+    "tagline": "Scramble, solve, beat your time.",
+    "startGame": "Start game",
+    "openArchive": "Open archive"
+  },
+  "game": {
+    "title": "Play Rubik's Cube Online",
+    "description": "Solve the cube with button and drag controls, live timer, pause and autosave.",
+    "heading": "Game",
+    "backToMenu": "Back to menu",
+    "sizeLabel": "Size",
+    "difficultyLabel": "Difficulty",
+    "saveLabel": "Save",
+    "continueLabel": "Continue",
+    "saved": "Saved",
+    "scrambling": "Scrambling cube",
+    "releaseToTurn": "Release to turn",
+    "releaseToCancel": "Release to cancel",
+    "pauseTitle": "Paused",
+    "solvedTitle": "Solved",
+    "playAgain": "Play again",
+    "restart": "Restart",
+    "quit": "Quit",
+    "status": {
+      "idle": "Idle",
+      "ready": "Ready",
+      "playing": "Playing",
+      "paused": "Paused",
+      "solved": "Solved",
+      "scrambling": "Scrambling"
+    },
+    "scrambleTurns": "{count} turns"
+  },
+  "hud": {
+    "timer": "Timer",
+    "moves": "Moves",
+    "pause": "Pause",
+    "resume": "Resume",
+    "peekLeft": "Peek left",
+    "peekRight": "Peek right",
+    "peekDown": "Peek below",
+    "peekTop": "Peek top",
+    "switchFront": "Switch front",
+    "frontTurns": "Face turn"
+  },
+  "archive": {
+    "title": "Saved Rubik's Cube Games",
+    "description": "Resume or manage your saved Rubik's Cube games.",
+    "heading": "Archive",
+    "empty": "No saved games yet.",
+    "backToMenu": "Back to menu",
+    "savedCount": "Saved games: {count}",
+    "delete": "Delete",
+    "autoName": "Saved game · {date}"
+  },
+  "difficulty": {
+    "easy": "Easy",
+    "normal": "Normal",
+    "hard": "Hard"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "rubiks-cube",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@sandlada/breakpoint": "^0.0.1-20260831.a",
+    "@sandlada/material-design-css": "^3.0.0-20260611.b",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/three": "^0.186.0",
+    "autoprefixer": "^10.6.1",
+    "pinia": "^4.0.3",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3",
+    "three": "^0.186.0",
+    "vue": "^3.5.42",
+    "vue-i18n": "^11.4.12",
+    "vue-router": "^5.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/tsconfig": "^0.9.1",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "vue-tsc": "^3.3.11"
+  }
+}

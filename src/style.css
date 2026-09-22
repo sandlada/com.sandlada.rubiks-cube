@@ -1,0 +1,38 @@
+@import "tailwindcss";
+@import "@sandlada/material-design-css/preset.css";
+
+/* Class-based dark mode: `dark:` variants apply under `.dark` on <html> (see theme store). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light dark;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Route transition for page-level <Transition> in App.vue */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 180ms ease;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
